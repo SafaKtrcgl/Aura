@@ -4,10 +4,51 @@
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include <EnhancedInputComponent.h>
+#include "Interaction/InteractableInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHitResult;
+	GetHitResultUnderCursor(ECC_Visibility, false, CursorHitResult);
+	if (!CursorHitResult.bBlockingHit) return;
+	
+	LastActor = CurrentActor;
+	CurrentActor = CursorHitResult.GetActor();
+
+	if (LastActor == nullptr)
+	{
+		if (CurrentActor != nullptr)
+		{
+			CurrentActor->HighlightActor();
+		}
+	}
+	else
+	{
+		if (CurrentActor == nullptr)
+		{
+			LastActor->UnhighlightActor();
+		}
+		else
+		{
+			if (LastActor != CurrentActor)
+			{
+				LastActor->UnhighlightActor();
+				CurrentActor->HighlightActor();
+			}
+		}
+	}
 }
 
 void AAuraPlayerController::BeginPlay()
