@@ -41,15 +41,24 @@ void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		for (auto InstantGameplayEffectClass : InstantGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		}
 	}
 	if (DurationEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		}
 	}
 	if (InfiniteEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		}
 	}
 }
 
@@ -57,15 +66,24 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 {
 	if (InstantEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		for (auto InstantGameplayEffectClass : InstantGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InstantGameplayEffectClass);
+		}
 	}
 	if (DurationEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		for (auto DurationGameplayEffectClass : DurationGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, DurationGameplayEffectClass);
+		}
 	}
 	if (InfiniteEffectApplicationPolicy == EEfectApplicationPolicy::ApplyOnEndOverlap)
 	{
-		ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		for (auto InfiniteGameplayEffectClass : InfiniteGameplayEffectClasses)
+		{
+			ApplyEffectToTarget(TargetActor, InfiniteGameplayEffectClass);
+		}
 	}
 	if (InfiniteEffectRemovalPolicy == EEfectRemovalPolicy::RemoveOnEndOverlap)
 	{

@@ -48,19 +48,19 @@ protected:
 	bool bDestroyOnEffectRemoval = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Applied Effects")
-	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InstantGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEfectApplicationPolicy InstantEffectApplicationPolicy = EEfectApplicationPolicy::DoNotApply;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> DurationGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> DurationGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEfectApplicationPolicy DurationEffectApplicationPolicy = EEfectApplicationPolicy::DoNotApply;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
-	TSubclassOf<UGameplayEffect> InfiniteGameplayEffectClass;
+	TArray<TSubclassOf<UGameplayEffect>> InfiniteGameplayEffectClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Applied Effects")
 	EEfectApplicationPolicy InfiniteEffectApplicationPolicy = EEfectApplicationPolicy::DoNotApply;
