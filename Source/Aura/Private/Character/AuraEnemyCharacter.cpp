@@ -12,7 +12,14 @@ void AAuraEnemyCharacter::BeginPlay()
 	GetMesh()->SetCustomDepthStencilValue(250);
 	Weapon->SetCustomDepthStencilValue(250);
 
+	InitAbilityActorInfo();
+}
+
+void AAuraEnemyCharacter::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
 AAuraEnemyCharacter::AAuraEnemyCharacter()
