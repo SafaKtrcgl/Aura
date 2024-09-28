@@ -10,5 +10,7 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* ASComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle GameplayEffectHandle)
 {
-	GEngine->AddOnScreenDebugMessage(1, 8.f, FColor::Blue, FString("Effect Applied!"));
+	FGameplayTagContainer TagContainer;
+	GameplayEffectSpec.GetAllAssetTags(TagContainer);
+	EffectAssetTags.Broadcast(TagContainer);
 }
