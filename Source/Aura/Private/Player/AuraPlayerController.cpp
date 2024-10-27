@@ -3,8 +3,10 @@
 
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
-#include <EnhancedInputComponent.h>
+#include "Input/AuraInputComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Interaction/InteractableInterface.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -51,6 +53,41 @@ void AAuraPlayerController::CursorTrace()
 	}
 }
 
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (GetAbilitySystemComponent() == nullptr)
+	{
+		return;
+	}
+
+	GetAbilitySystemComponent()->AbilityInputTagHeld(InputTag);
+}
+
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (GetAbilitySystemComponent() == nullptr)
+	{
+		return;
+	}
+
+	GetAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+}
+
+UAuraAbilitySystemComponent* AAuraPlayerController::GetAbilitySystemComponent()
+{
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+
+	return AuraAbilitySystemComponent;
+}
+
 void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -76,9 +113,11 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputcomponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	
-	EnhancedInputcomponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+
+	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagHeld, &ThisClass::AbilityInputTagReleased);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
