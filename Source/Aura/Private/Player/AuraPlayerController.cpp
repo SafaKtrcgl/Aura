@@ -95,7 +95,7 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		return;
 	}
 
-	if (bTargeting)
+	if (bTargeting || bShiftKeyDown)
 	{
 		if (AbilitySystemComponent == nullptr)
 		{
@@ -127,25 +127,13 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 
 	if (!InputTag.MatchesTagExact(FAuraGameplayTags::Get().InputTag_LMB))
 	{
-		if (AbilitySystemComponent == nullptr)
-		{
-			return;
-		}
-
 		AbilitySystemComponent->AbilityInputTagReleased(InputTag);
 		return;
 	}
 
-	if (bTargeting)
-	{
-		if (AbilitySystemComponent == nullptr)
-		{
-			return;
-		}
+	AbilitySystemComponent->AbilityInputTagReleased(InputTag);
 
-		AbilitySystemComponent->AbilityInputTagReleased(InputTag);
-	}
-	else
+	if (!bTargeting && !bShiftKeyDown)
 	{
 		if (FollowTime < ShortPressThreshold)
 		{
@@ -154,7 +142,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				if (auto NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(this, ControlledPawn->GetActorLocation(), CachedDestination))
 				{
 					Spline->ClearSplinePoints();
-					
+
 					for (const FVector& PointLocation : NavPath->PathPoints)
 					{
 						Spline->AddSplinePoint(PointLocation, ESplineCoordinateSpace::World);
@@ -210,6 +198,9 @@ void AAuraPlayerController::SetupInputComponent()
 	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
 	
 	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Started, this, &AAuraPlayerController::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction, ETriggerEvent::Completed, this, &AAuraPlayerController::ShiftReleased);
 
 	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagHeld, &ThisClass::AbilityInputTagReleased);
 }
