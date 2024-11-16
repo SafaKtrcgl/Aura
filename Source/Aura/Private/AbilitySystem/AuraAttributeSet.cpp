@@ -105,6 +105,27 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	{
 		SetMana(FMath::Clamp(GetMana(), 0, GetMaxMana()));
 	}
+	else if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		const auto IncomingDamageValue = GetIncomingDamage();
+		SetIncomingDamage(0.f);
+		if (IncomingDamageValue > 0.f)
+		{
+			const float NewHealth = GetHealth() - IncomingDamageValue;
+			SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+
+			if (NewHealth <= 0.f)
+			{
+				
+			}
+			else
+			{
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+				EffectProperties.TargetASComponent->TryActivateAbilitiesByTag(TagContainer);
+			}
+		}
+	}
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
