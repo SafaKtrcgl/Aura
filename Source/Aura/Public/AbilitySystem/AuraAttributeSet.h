@@ -164,10 +164,10 @@ public:
 	void OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const;
 
 	UFUNCTION()
-	void OnRep_BlockChance(const FGameplayAttributeData& OldArmor) const;
+	void OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const;
 	
 	UFUNCTION()
-	void OnRep_CriticalHitChance(const FGameplayAttributeData& OldArmorPenetration) const;
+	void OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const;
 
 	UFUNCTION()
 	void OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const;
@@ -189,4 +189,5 @@ public:
 
 private:
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Properties) const;
+	void ShowFloatingText(const FEffectProperties& EffectProperties, float Damage, bool bBlockedHit, bool bCriticalHit) const;
 };

@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
+#include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/AuraPlayerController.h"
@@ -131,13 +132,19 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 				EffectProperties.TargetASComponent->TryActivateAbilitiesByTag(TagContainer);
 			}
 
-			if (EffectProperties.SourceCharacter != EffectProperties.TargetCharacter)
-			{
-				if (const auto AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0)))
-				{
-					AuraPlayerController->ShowDamageText(IncomingDamageValue, EffectProperties.TargetCharacter);
-				}
-			}
+			const auto EffectContextHandle = EffectProperties.GameplayEffectContextHandle;
+			ShowFloatingText(EffectProperties, IncomingDamageValue, UAuraAbilitySystemLibrary::IsBlockedHit(EffectContextHandle), UAuraAbilitySystemLibrary::IsCriticalHit(EffectContextHandle));
+		}
+	}
+}
+
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& EffectProperties, float Damage, bool bBlockedHit, bool bCriticalHit) const
+{
+	if (EffectProperties.SourceCharacter != EffectProperties.TargetCharacter)
+	{
+		if (const auto AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0)))
+		{
+			AuraPlayerController->ShowDamageText(Damage, EffectProperties.TargetCharacter);
 		}
 	}
 }
