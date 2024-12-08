@@ -144,7 +144,7 @@ void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& EffectProperti
 	{
 		if (const auto AuraPlayerController = Cast<AAuraPlayerController>(UGameplayStatics::GetPlayerController(EffectProperties.SourceCharacter, 0)))
 		{
-			AuraPlayerController->ShowDamageText(Damage, EffectProperties.TargetCharacter);
+			AuraPlayerController->ShowDamageText(Damage, EffectProperties.TargetCharacter, bBlockedHit, bCriticalHit);
 		}
 	}
 }
